@@ -1,9 +1,9 @@
 import numpy as np
 
 
-from keras import backend as K
-from keras.models import Model
-from keras.layers import Input, Lambda, ReLU, Add, Dense, Conv2D, Flatten, AveragePooling2D
+from tensorflow.keras import backend as K
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Lambda, ReLU, Add, Dense, Conv2D, Flatten, AveragePooling2D
 
 
 # In[]
@@ -145,5 +145,5 @@ class TripletNet():
            # a "dummy" label which will come in to our identity loss
            # function below as y_true. We'll ignore it.
             label = np.ones(batchsize)
-            yield [A, P, N], label  
+            yield (A, P, N), label  
 

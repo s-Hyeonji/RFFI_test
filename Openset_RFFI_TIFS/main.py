@@ -1,16 +1,15 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
-
+import tensorflow as tf
 
 from sklearn.metrics import roc_curve, auc , confusion_matrix, accuracy_score
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.model_selection import train_test_split
 
-
-from keras.models import load_model
-from keras.callbacks import EarlyStopping, ReduceLROnPlateau
-from keras.optimizers import RMSprop
+from tensorflow.keras.models import load_model
+from tensorflow.keras.callbacks import EarlyStopping, ReduceLROnPlateau
+from tensorflow.keras.optimizers import RMSprop
 
 
 from dataset_preparation import awgn, LoadDataset, ChannelIndSpectrogram
@@ -102,16 +101,30 @@ def train_feature_extractor(
                                                      data_valid, 
                                                      label_valid)
     
-    
     # Use the RMSprop optimizer for training.
     opt = RMSprop(learning_rate=1e-3)
     triplet_net.compile(loss = identity_loss, optimizer = opt)
+
+
+
+
+    valid_dataset = tf.data.Dataset.from_generator(
+    lambda: valid_generator,  # 제너레이터 함수 전달
+    output_signature=(
+        (  
+            tf.TensorSpec(shape=(None, 102, 62, 1), dtype=tf.float32),  # A  
+            tf.TensorSpec(shape=(None, 102, 62, 1), dtype=tf.float32),  # P  
+            tf.TensorSpec(shape=(None, 102, 62, 1), dtype=tf.float32)   # N  
+        ),  
+        tf.TensorSpec(shape=(None,), dtype=tf.float32)  # label (더미 값)
+    )
+)
 
     # Start training.
     history = triplet_net.fit(train_generator,
                               steps_per_epoch = data_train.shape[0]//batch_size,
                               epochs = 1000,
-                              validation_data = valid_generator,
+                              validation_data = valid_dataset,
                               validation_steps = data_valid.shape[0]//batch_size,
                               verbose=1, 
                               callbacks = callbacks)
@@ -361,7 +374,7 @@ if __name__ == '__main__':
     
     # Specifies what task the program runs for. 
     # 'Train'/'Classification'/'Rogue Device Detection'
-    run_for = 'Classification'
+    run_for = 'Train'
     
     if run_for == 'Train':
 

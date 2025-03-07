@@ -179,3 +179,5 @@ class ChannelIndSpectrogram():
             
         return data_channel_ind_spec
 
+
+# %%

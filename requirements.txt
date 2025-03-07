@@ -1,4 +1,4 @@
-# This file may be used to create an environment using:
+pip install h5py# This file may be used to create an environment using:
 # $ conda create --name <env> --file <this file>
 # platform: win-64
 _tflow_select=2.1.0=gpu
