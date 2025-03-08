@@ -161,3 +161,19 @@ if __name__ == '__main__':
 
         acc = test(file_path, clf_path)
         print('Overall accuracy = %.4f' % acc)
+#_______________________________
+import matplotlib.pyplot as plt
+# Plot the ROC curves.
+
+plt.figure(figsize=(4.8, 2.8))
+plt.xlim(-0.01, 1.02)
+plt.ylim(-0.01, 1.02)
+plt.plot([0, 1], [0, 1], 'k--')
+plt.plot(fpr, tpr, label='Extractor 1, AUC = '
++ str(round(roc_auc,3)) + ', EER = ' + str(round(eer,3)), C='r')
+plt.xlabel('False positive rate')
+plt.ylabel('True positive rate')
+plt.title('ROC curve')
+plt.legend(loc=4)
+# plt.savefig('roc_curve.pdf',bbox_inches='tight')
+plt.show()
